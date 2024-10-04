@@ -30,7 +30,6 @@ class CheckoutController extends Controller
         ]);
 
         $this->checkoutService->addOrder($validatedData['name'], $validatedData['email'], $validatedData['phone'], $validatedData['address']);
-
         return redirect()->route('checkout.index')->with('success', 'Order placed successfully!');
     }
 }

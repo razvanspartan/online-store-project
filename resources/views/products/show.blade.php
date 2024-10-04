@@ -1,13 +1,20 @@
 @extends('layouts.app')
 @section('content')
     <h1>{{ $product->title }}</h1>
+
     <p><strong>Price:</strong> {{ $product->price }}</p>
+    @if ($product->is_taxable)
+        <strong>Taxed price: </strong> {{number_format($product->price*1.19,2)}}
+    @endif
     <p><strong>Description:</strong> {{ $product->description ?? 'No description available' }}</p>
     <p><strong>Categories:</strong>
+
         @foreach ($product->categories as $category)
             {{ $category->name }}@if (!$loop->last), @endif
         @endforeach
+
     </p>
+
     <form action="{{ route('cart.add') }}" method="POST">
         @csrf
         <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -17,5 +24,7 @@
 
         <button type="submit">Add to Cart</button>
     </form>
+
     <a href="{{ route('products.index') }}">Back to Products</a>
+
 @endsection

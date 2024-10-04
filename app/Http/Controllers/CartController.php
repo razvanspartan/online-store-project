@@ -26,4 +26,19 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Product removed from cart successfully!');
 
     }
+    public function apply_coupon(Request $request){
+        $request->validate([
+            'coupon' => 'required|string'
+        ]);
+
+        $coupon = $request->input('coupon');
+
+        if ($coupon === 'PROMO7352'){
+            $cart = $this->cartService->apply_coupon();
+            return redirect()->route('cart.index');
+        }
+        else{
+            return redirect()->route('cart.index')->with('error', 'Invalid coupon code.');
+        }
+    }
 }

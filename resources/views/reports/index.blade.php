@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
     <a href="{{route('products.index')}}">Back to products</a>
+
     <h1>Report</h1>
 
     @if ($orders->isNotEmpty())
@@ -16,6 +18,7 @@
             </tr>
             </thead>
             <tbody>
+
             @foreach ($orders as $order)
                 <tr>
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['id'] }}</td>
@@ -25,8 +28,10 @@
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['product_count'] }}</td>
                 </tr>
             @endforeach
+
             </tbody>
         </table>
+
     @else
         <p>No orders found matching the criteria.</p>
     @endif

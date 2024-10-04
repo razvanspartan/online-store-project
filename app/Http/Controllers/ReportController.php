@@ -10,24 +10,24 @@ class ReportController extends Controller
 {
     public function index()
     {
-
         $orders = Order::with(['products' => function ($query) {
-            $query->where('price', '<', 100);
+            $query->where('order_product.price', '<', 100);
         }])
             ->whereHas('products.categories', function ($query) {
                 $query->has('products', '>', 3);
             })
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'created_at' => $order->created_at,
-                    'client_name' => $order->name,
-                    'client_email' => $order->email,
-                    'product_count' => $order->products->sum('pivot.quantity'),
-                ];
-            })
-            ->sortBy('product_count');
+            ->selectRaw('
+                orders.id,
+                orders.created_at,
+                orders.name as client_name,
+                orders.email as client_email,
+                SUM(order_product.quantity) as product_count,
+                SUM(order_product.price * order_product.quantity) as total_price'  // Calculate total price based on new_price
+            )
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->groupBy('orders.id', 'orders.created_at', 'orders.name', 'orders.email')
+            ->orderBy('product_count', 'desc')
+            ->get();
 
         return view('reports.index', compact('orders'));
     }

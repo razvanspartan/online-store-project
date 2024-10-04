@@ -3,6 +3,11 @@
 @section('content')
     <a href="{{route('products.index')}}">Back to products</a>
     <h1>Checkout</h1>
+    @if (session('success'))
+        <div style="color: green; font-weight: bold;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     @if (session('cart') && count(session('cart')) > 0)
         <form  action="{{ route('checkout.order') }}" method="POST">
@@ -29,6 +34,7 @@
             </div>
 
             <h3>Your Order</h3>
+
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                 <tr>
@@ -39,7 +45,9 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 @php $total = 0; @endphp
+
                 @foreach (session('cart') as $productId => $item)
                     @php
                         $product = App\Models\Product::find($productId);
@@ -47,12 +55,14 @@
                         $itemTotal = $price * $item['quantity'];
                         $total += $itemTotal;
                     @endphp
+
                     <tr>
                         <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->title }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">{{ $item['quantity'] }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">{{ number_format($price,2) }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">{{ $itemTotal }}</td>
                     </tr>
+
                 @endforeach
                 </tbody>
             </table>

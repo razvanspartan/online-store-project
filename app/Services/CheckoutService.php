@@ -16,7 +16,11 @@ class CheckoutService
        ]);
       $cart=session()->get('cart', []);
        foreach ($cart as $productId => $item) {
-           $order->products()->attach($productId, ['quantity' => $item['quantity']]);
+           $order->products()->attach($productId,
+               [
+                   'quantity' => $item['quantity'],
+                   'price' => $item['price']
+               ]);
        }
        session()->forget('cart');
    }
