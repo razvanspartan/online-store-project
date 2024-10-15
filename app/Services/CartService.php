@@ -40,32 +40,31 @@ class CartService
     }
     public function apply_coupon(){
         $cart = session()->get('cart', []);
-        foreach($cart as $productId => $item){
+        foreach ($cart as $productId => $item) {
             $product = Product::findOrFail($productId);
             $oldPrice = $item['price'];
             $discount = 0;
-
-            foreach($product->categories as $category) {
-                if (in_array($category->id, [1, 3])) {
-                    $discount = 100;
+            if(!isset($item['appliedCoupon'])) {
+                foreach ($product->categories as $category) {
+                    if (in_array($category->id, [1, 3])) {
+                        $discount = 100;
+                    }
                 }
-            }
-            if(!$discount) {
-                if ($item['quantity'] > 5) {
-                    $discount = $oldPrice * 0.20;
-                } elseif ($item['quantity'] > 3) {
-                    $discount = $oldPrice * 0.10;
+                if (!$discount) {
+                    if ($item['quantity'] > 5) {
+                        $discount = $oldPrice * 0.20;
+                    } elseif ($item['quantity'] > 3) {
+                        $discount = $oldPrice * 0.10;
+                    }
                 }
+                $newPrice = max(0, $oldPrice - $discount);
+                $cart[$productId]['old_price'] = $oldPrice;
+                $cart[$productId]['price'] = $newPrice;
+                $cart[$productId]['discount'] = $discount;
+                $cart[$productId]['appliedCoupon'] = 1;
             }
-            $newPrice = max(0,$oldPrice - $discount);
-            $cart[$productId]['old_price'] = $oldPrice;
-            $cart[$productId]['price'] = $newPrice;
-            $cart[$productId]['discount'] = $discount;
 
-        }
+            }
         session()->put('cart', $cart);
-
-
-
 }
 }

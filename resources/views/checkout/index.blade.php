@@ -51,7 +51,7 @@
                 @foreach (session('cart') as $productId => $item)
                     @php
                         $product = App\Models\Product::find($productId);
-                        $price = $product->is_taxable ? $product->price * 1.16 : $product->price;
+                        $price = $item['price'];
                         $itemTotal = $price * $item['quantity'];
                         $total += $itemTotal;
                     @endphp

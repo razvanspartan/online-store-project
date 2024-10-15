@@ -25,7 +25,7 @@
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['created_at'] }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['client_name'] }}</td>
                     <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['client_email'] }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['product_count'] }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $order['total_quantity'] }}</td>
                 </tr>
             @endforeach
 
