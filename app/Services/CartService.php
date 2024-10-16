@@ -25,7 +25,6 @@ class CartService
                 'quantity' => $quantity
             ];
         }
-
         session()->put('cart', $cart);
     }
 

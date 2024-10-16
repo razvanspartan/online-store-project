@@ -18,7 +18,20 @@ class CartController extends Controller
         return view('cart.index', compact('cart'));
     }
     public function add(Request $request){
-        $cart = $this->cartService->addToCart($request->product_id, $request->quantity);
+        $this->cartService->addToCart($request->product_id, $request->quantity);
+        $couponApplied = false;
+        $cart=session()->get('cart', []);
+        foreach($cart as $cartItem) {
+            echo(isset($cartItem['appliedCoupon']));
+            if(isset($cartItem['appliedCoupon'])){
+                $couponApplied = true;
+                break;
+            }
+        }
+        echo($couponApplied);
+        if($couponApplied){
+            $this->cartService->apply_coupon();
+        }
         return redirect()->route('cart.index')->with('success', 'Product added to cart successfully!');
     }
     public function remove($id){
